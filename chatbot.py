@@ -194,5 +194,6 @@ m = model.to(device)
 while True:
     prompt = input("Prompt:\n")
     context = torch.tensor(encode(prompt), dtype=torch.long, device=device)
+    # 为上下文张量添加一个额外的维度,将其转换为批次大小为1的张量
     generated_chars = decode(m.generate(context.unsqueeze(0), max_new_tokens=150)[0].tolist())
     print(f'Completion:\n{generated_chars}')
