@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 # Now we can use the argument value in our program.
 print(f'batch size: {args.batch_size}')
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'mps' if torch.backends.mps.is_available() else 'cpu'
 
 batch_size = int(args.batch_size)
 block_size = 128
@@ -30,7 +30,7 @@ dropout = 0.2
 print(device)
 
 chars = ""
-with open("openwebtext/vocab.txt", 'r', encoding='utf-8') as f:
+with open("vocab.txt", 'r', encoding='utf-8') as f:
         text = f.read()
         chars = sorted(list(set(text)))
         
@@ -145,9 +145,7 @@ class GPTLanguageModel(nn.Module):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
     def forward(self, index, targets=None):
-        print(index.shape)
         B, T = index.shape
-        
         
         # idx and targets are both (B,T) tensor of integers
         tok_emb = self.token_embedding_table(index) # (B,T,C)
